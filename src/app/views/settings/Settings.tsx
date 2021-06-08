@@ -21,11 +21,11 @@ import { ThemeChooser } from './ThemeChooser';
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
 
-  const { permissionsPanelOpen, profile, authToken } = useSelector((state: IRootState) => state);
+  const { permissionsPanelOpen, profile, authToken, theme: appTheme } = useSelector((state: IRootState) => state);
   const [items, setItems] = useState<any[]>([]);
+  const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
-  const authenticated = !!authToken;
 
   const cloudOptions = new Sovereign(profile).getOptions();
 

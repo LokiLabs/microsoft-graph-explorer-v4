@@ -70,7 +70,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private getAccount(): AccountInfo | undefined {
+  public getAccount(): AccountInfo | undefined {
     if (!msalApplication) {
       return undefined;
     }

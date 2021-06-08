@@ -21,7 +21,7 @@ export interface IQuery {
 }
 
 export interface IQueryRunnerProps {
-  headers: Header[];
+  headers?: Header[];
   onSelectVerb: Function;
   sampleQuery: IQuery;
   actions?: {
