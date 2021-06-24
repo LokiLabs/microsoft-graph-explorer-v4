@@ -5,6 +5,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/', function(req, res) {
+  // test comment
   res.removeHeader('X-Frame-Options');
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
