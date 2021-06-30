@@ -37,7 +37,7 @@ export interface IRootState {
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
   permissionModeType: PERMISSION_MODE_TYPE;
-  accountType: ACCOUNT_TYPE;
+  profileType: ACCOUNT_TYPE;
 }
 
 export interface IApiFetch {

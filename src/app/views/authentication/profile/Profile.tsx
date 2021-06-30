@@ -21,8 +21,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       user: {
         displayName: '',
         emailAddress: '',
-        profileImageUrl: '',
-        accountType: ACCOUNT_TYPE.AAD
+        profileImageUrl: ''
       }
     };
   }
@@ -44,7 +43,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       })
       : null;
 
-    const betaUserInfo = betaJsonUserInfo.response;
     const userInfo = jsonUserInfo.response;
     if (userInfo) {
       let imageUrl = '';
@@ -66,24 +64,11 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         imageUrl = '';
       }
 
-      let accountType = ACCOUNT_TYPE.MSA;
-      try {
-        const stringAccountType = betaUserInfo.account[0].source.type[0];
-        if (stringAccountType === ACCOUNT_TYPE.AAD) {
-          accountType = ACCOUNT_TYPE.AAD;
-        } else if (stringAccountType === ACCOUNT_TYPE.AAD) {
-          accountType = ACCOUNT_TYPE.AAD;
-        }
-      } catch (error) {
-        console.log("Every account should have a type. Assigning to MSA, which has lowest permissions level.")
-      }
-
       const user = {
         ...{},
         displayName: userInfo.displayName,
         emailAddress: userInfo.mail || userInfo.userPrincipalName,
-        profileImageUrl: imageUrl,
-        accountType: accountType
+        profileImageUrl: imageUrl
       };
 
       this.setState({

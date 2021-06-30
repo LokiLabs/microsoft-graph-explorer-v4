@@ -24,5 +24,4 @@ export interface IUser {
     displayName: string;
     emailAddress: string;
     profileImageUrl: string;
-    accountType: ACCOUNT_TYPE;
 }
