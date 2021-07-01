@@ -15,3 +15,7 @@ export function permissionModeType(state: boolean = DISPLAY_DELEGATED_PERMISSION
             return state;
     }
 }
+
+export function switchPermissionMode(state = " ", action: IAction) {
+
+}
