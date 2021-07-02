@@ -34,6 +34,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
+import { fetchScopes } from '../../../services/actions/permissions-action-creator';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
 import { validateExternalLink } from '../../../utils/external-link-validation';
@@ -63,6 +64,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     if (prevProps.samples.queries !== this.props.samples.queries) {
+      this.props.actions!.fetchScopes();
       this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
@@ -291,6 +293,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         }
       }
       actions.setSampleQuery(sampleQuery);
+      actions.fetchScopes();
     }
   };
 
@@ -483,6 +486,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
       {
+        fetchScopes,
         ...queryActionCreators,
         ...queryInputActionCreators,
         ...samplesActionCreators,

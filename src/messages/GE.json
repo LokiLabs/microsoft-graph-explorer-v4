@@ -359,5 +359,7 @@
   "As user": "(as user)",
   "As Teams app": "(as Teams app)",
   "Use Explorer as sample Teams application": "Use Explorer as sample Teams application",
-  "Use Explorer as logged-in user": "Use Explorer as logged-in user"
+  "Use Explorer as logged-in user": "Use Explorer as logged-in user",
+  "delegated user mode": "This query requires permissions that can only be found in delegated user mode. Switch to delegated user mode in the top left three dots.",
+  "application mode": "This query requires permissions that can only be found application mode. Switch to application mode in the top left three dots."
 }

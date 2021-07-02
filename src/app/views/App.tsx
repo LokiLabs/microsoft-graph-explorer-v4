@@ -18,6 +18,7 @@ import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
+import { fetchScopes } from '../services/actions/permissions-action-creator';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { changeMode } from '../services/actions/permission-mode-action-creator';
@@ -62,6 +63,7 @@ interface IAppProps {
     signIn: Function;
     storeScopes: Function;
     changeMode: Function;
+    fetchScopes: Function;
   };
 }
 
@@ -86,6 +88,7 @@ class App extends Component<IAppProps, IAppState> {
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
+    this.props.actions!.fetchScopes();
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
@@ -305,7 +308,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, permissionModeType, intl: { messages } }: any = this.props;
+      actions, sidebarProperties, permissionModeType, intl: { messages }, scopes }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -377,7 +380,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
-                {statusMessages(queryState, sampleQuery, actions)}
+                {statusMessages(queryState, sampleQuery, actions, scopes, permissionModeType)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 {
                   // @ts-ignore
@@ -393,7 +396,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType, scopes
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -409,7 +412,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
     authenticated: !!authToken.token,
-    permissionModeType
+    permissionModeType,
+    scopes
   };
 };
 
@@ -422,6 +426,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       setSampleQuery,
       toggleSidebar,
       changeMode,
+      fetchScopes,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
