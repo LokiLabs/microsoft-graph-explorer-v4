@@ -357,5 +357,7 @@
   "Click here to follow the link": "Click here to follow the link",
   "Signing you out...": "Signing you out...",
   "As user": "(as user)",
-  "As Teams app": "(as Teams app)"
+  "As Teams app": "(as Teams app)",
+  "delegated user mode": "This query requires permissions that can only be found in delegated user mode. Switch to delegated user mode in the top left hamburger menu.",
+  "application mode": "This query requires permissions that can only be found application mode. Switch to application mode in the top left hamburger menu."
 }

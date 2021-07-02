@@ -1,15 +1,16 @@
 import { Link, MessageBar } from 'office-ui-fabric-react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { IPermission } from '../../../types/permissions';
 
 import { IQuery } from '../../../types/query-runner';
-import { GRAPH_URL } from '../../services/graph-constants';
+import { DISPLAY_APPLICATION_PERMISSIONS, DISPLAY_DELEGATED_PERMISSIONS, GRAPH_URL, RSC_PERMISSIONS_ENDINGS } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 
-export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
+export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any, scopes: any, permissionModeType: boolean) {
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
 
@@ -51,16 +52,31 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
       message = replaceLinks(status);
       urls = convertArrayToObject(extractedUrls);
     }
+    const isRSC = (permission: IPermission) => {
+      return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) !== -1)
+    }
+
+    const filterPermissionsForRSC = () => {
+      return permissionModeType === DISPLAY_APPLICATION_PERMISSIONS ? permissions.filter(isRSC) : permissions;
+    }
+
+    const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
+    const filteredScopes = filterPermissionsForRSC();
+    const noPerms = filteredScopes.length === 0;
 
     return (
-      <MessageBar messageBarType={messageType}
+      <MessageBar messageBarType={noPerms ? 5 : messageType}
         isMultiline={true}
         onDismiss={actions.clearQueryStatus}
         dismissButtonAriaLabel='Close'
         aria-live={'assertive'}>
-        {`${statusText} - `}{displayStatusMessage(message, urls)}
 
-        {duration && <>
+        {noPerms && permissionModeType === DISPLAY_APPLICATION_PERMISSIONS && <FormattedMessage id='delegated user mode' />}
+        {noPerms && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS && <FormattedMessage id='application mode' />}
+
+        {!noPerms && `${statusText} - `}{!noPerms && displayStatusMessage(message, urls)}
+
+        {!noPerms && duration && <>
           {` - ${duration}`}<FormattedMessage id='milliseconds' />
         </>}
 

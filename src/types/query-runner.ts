@@ -100,6 +100,7 @@ export interface ISampleQueriesProps {
     setSampleQuery: Function;
     fetchSamples: Function;
     setQueryResponseStatus: Function;
+    fetchScopes: Function;
   };
   intl: {
     message: object;
