@@ -16,6 +16,3 @@ export function permissionModeType(state: PERMISSION_MODE_TYPE = PERMISSION_MODE
     }
 }
 
-export function switchPermissionMode(state = " ", action: IAction) {
-
-}
