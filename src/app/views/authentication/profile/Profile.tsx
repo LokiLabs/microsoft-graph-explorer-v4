@@ -10,7 +10,7 @@ import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { APP_IMAGE, DISPLAY_DELEGATED_PERMISSIONS, USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
@@ -104,14 +104,17 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       graphExplorerMode,
     }: any = this.props;
 
+    const delegatedPermissions = this.props.permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
+    const userText = user.displayName + ' '
+      + (delegatedPermissions
+        ? translateMessage('As user')
+        : translateMessage('As Teams app'));
+
     const persona: IPersonaSharedProps = {
-      imageUrl: user.profileImageUrl,
+      imageUrl: delegatedPermissions ? user.profileImageUrl : APP_IMAGE,
       imageInitials: this.getInitials(user.displayName),
-      text: user.displayName + ' '
-        + (this.props.permissionModeType
-          ? translateMessage('As user')
-          : translateMessage('As Teams app')),
-      secondaryText: user.emailAddress,
+      text: delegatedPermissions ? userText : translateMessage('Graph Explorer Sample App'),
+      secondaryText: delegatedPermissions ? user.emailAddress : "",
     };
 
     const classes = classNames(this.props);
