@@ -12,6 +12,7 @@ export interface IProfileProps {
         getProfileInfo: Function;
         signOut: Function;
     };
+    permissionModeType: boolean;
 }
 
 export interface IProfileState {

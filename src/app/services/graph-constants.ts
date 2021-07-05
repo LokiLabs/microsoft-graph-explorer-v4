@@ -11,3 +11,11 @@ export enum ACCOUNT_TYPE {
     AAD = "AAD",
     MSA = "MSA"
 };
+export enum PERMS_SCOPE {
+    WORK = "DelegatedWork",
+    APPLICATION = "Application",
+    PERSONAL = "DelegatedPersonal"
+};
+export const DISPLAY_DELEGATED_PERMISSIONS = true;
+export const DISPLAY_APPLICATION_PERMISSIONS = false;
+export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
