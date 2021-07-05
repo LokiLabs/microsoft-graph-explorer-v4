@@ -15,4 +15,3 @@ export function permissionModeType(state: PERMISSION_MODE_TYPE = PERMISSION_MODE
             return state;
     }
 }
-

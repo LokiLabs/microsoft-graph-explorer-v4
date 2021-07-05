@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { IPermission } from '../../../types/permissions';
 
 import { IQuery } from '../../../types/query-runner';
-import { PERMISSION_MODE_TYPE, GRAPH_URL, RSC_PERMISSIONS_ENDINGS } from '../../services/graph-constants';
+import { PERMISSION_MODE_TYPE, GRAPH_URL, RSC_PERMISSIONS_ENDINGS, SWITCH_MODE_NOTICE } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
@@ -65,7 +65,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
     const noPerms = filteredScopes.length === 0;
 
     return (
-      <MessageBar messageBarType={noPerms ? 5 : messageType}
+      <MessageBar messageBarType={noPerms ? SWITCH_MODE_NOTICE : messageType}
         isMultiline={true}
         onDismiss={actions.clearQueryStatus}
         dismissButtonAriaLabel='Close'

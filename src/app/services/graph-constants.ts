@@ -16,3 +16,4 @@ export enum PERMISSION_MODE_TYPE {
     User
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
+export const SWITCH_MODE_NOTICE = 5
