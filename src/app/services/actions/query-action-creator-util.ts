@@ -73,7 +73,7 @@ export function getContentType(headers: Headers) {
   }
 }
 
-export function parseResponse(response: any, respHeaders: any): Promise<any> {
+export function parseResponse(response: Response, respHeaders: any): Promise<any> | Response {
   if (response && response.headers) {
     response.headers.forEach((val: any, key: any) => {
       respHeaders[key] = val;

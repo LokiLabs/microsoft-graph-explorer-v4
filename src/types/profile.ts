@@ -1,5 +1,4 @@
 import { ITheme } from 'office-ui-fabric-react';
-import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
     intl: {

@@ -6,7 +6,7 @@ export function profileTypeSuccess(response: any): any {
   return {
     type: PROFILE_TYPE_SUCCESS,
     response,
-  }
+  };
 }
 
 export function profileRequestSuccess(response: object): any {
@@ -51,7 +51,7 @@ export function getProfileInfo(query: IQuery): Function {
         const isImageResult = isImageResponse(contentType);
 
         try {
-          dispatch(profileTypeSuccess(json.account[0].source.type[0]))
+          dispatch(profileTypeSuccess(json.account[0].source.type[0]));
         } catch (error) {
           console.log(error);
         }
