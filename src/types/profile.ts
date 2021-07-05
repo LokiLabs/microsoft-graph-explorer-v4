@@ -1,5 +1,5 @@
 import { ITheme } from 'office-ui-fabric-react';
-import { PERMISSION_MODE_TYPE, ACCOUNT_TYPE } from '../app/services/graph-constants';
+import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
     intl: {
