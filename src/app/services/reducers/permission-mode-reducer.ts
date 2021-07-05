@@ -15,4 +15,3 @@ export function permissionModeType(state: boolean = DISPLAY_DELEGATED_PERMISSION
             return state;
     }
 }
-

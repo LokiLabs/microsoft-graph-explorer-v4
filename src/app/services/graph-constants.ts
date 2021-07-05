@@ -14,3 +14,4 @@ export enum PERMS_SCOPE {
 export const DISPLAY_DELEGATED_PERMISSIONS = true;
 export const DISPLAY_APPLICATION_PERMISSIONS = false;
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
+export const SWITCH_MODE_NOTICE = 5
