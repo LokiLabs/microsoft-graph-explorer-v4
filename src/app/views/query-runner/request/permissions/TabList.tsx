@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
-import { DISPLAY_APPLICATION_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
+import { DISPLAY_APPLICATION_PERMISSIONS, DISPLAY_DELEGATED_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -66,6 +66,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNoPermissionsFoundMessage();
   }
 
+  const isDelegatedPermissions = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -73,11 +74,11 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
       </Label>
       <Label className={classes.permissionText}>
         {!tokenPresent
-          && <FormattedMessage id={permissionModeType
+          && <FormattedMessage id={isDelegatedPermissions
             ? 'sign in to consent to permissions'
             : 'sign in to consent to application permissions'} />}
         {tokenPresent
-          && <FormattedMessage id={permissionModeType
+          && <FormattedMessage id={isDelegatedPermissions
             ? 'permissions required to run the query'
             : 'application permissions required to run the query'} />}
       </Label>

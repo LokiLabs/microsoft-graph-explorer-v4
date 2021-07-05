@@ -104,17 +104,17 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       graphExplorerMode,
     }: any = this.props;
 
-    const delegatedPermissions = this.props.permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
+    const isDelegatedPermissions = this.props.permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
     const userText = user.displayName + ' '
-      + (delegatedPermissions
+      + (isDelegatedPermissions
         ? translateMessage('As user')
         : translateMessage('As Teams app'));
 
     const persona: IPersonaSharedProps = {
-      imageUrl: delegatedPermissions ? user.profileImageUrl : APP_IMAGE,
+      imageUrl: isDelegatedPermissions ? user.profileImageUrl : APP_IMAGE,
       imageInitials: this.getInitials(user.displayName),
-      text: delegatedPermissions ? userText : translateMessage('Graph Explorer Sample App'),
-      secondaryText: delegatedPermissions ? user.emailAddress : "",
+      text: isDelegatedPermissions ? userText : translateMessage('Graph Explorer Sample App'),
+      secondaryText: isDelegatedPermissions ? user.emailAddress : "",
     };
 
     const classes = classNames(this.props);
