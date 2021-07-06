@@ -41,8 +41,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
     if (prevProps.sample !== this.props.sample
-      || prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
-      || prevProps.permissionModeType !== this.props.permissionModeType) {
+        || prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
+        || prevProps.permissionModeType !== this.props.permissionModeType) {
       this.getPermissions();
     }
 
