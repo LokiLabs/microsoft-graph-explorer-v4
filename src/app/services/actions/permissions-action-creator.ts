@@ -66,6 +66,8 @@ export function fetchScopes(): Function {
         permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
       }
 
+
+      // discuss solution on thursday
       if (permissionsPanelOpen) {
         permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scope}`;
       }
