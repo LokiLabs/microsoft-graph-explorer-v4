@@ -68,6 +68,10 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNoPermissionsFoundMessage();
   }
 
+  if (filteredPermissions.length === 1 && filteredPermissions[0].value === "Not supported.") {
+    return displayNoPermissionsFoundMessage();
+  }
+
   return (
     <>
       <Label className={classes.permissionLength}>

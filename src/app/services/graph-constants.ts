@@ -7,6 +7,10 @@ export const DEFAULT_USER_SCOPES = 'openid profile User.Read';
 export const DEVX_API_URL = 'https://graphexplorerapi.azurewebsites.net';
 export const GRAPH_API_SANDBOX_URL = 'https://proxy.apisandbox.msdn.microsoft.com';
 export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
+export enum ACCOUNT_TYPE {
+    AAD = "AAD",
+    MSA = "MSA"
+};
 export enum PERMS_SCOPE {
     WORK = "DelegatedWork",
     APPLICATION = "Application",
@@ -17,7 +21,4 @@ export enum PERMISSION_MODE_TYPE {
     User
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
-export enum ACCOUNT_TYPE {
-    AAD = "AAD",
-    MSA = "MSA"
-};
+

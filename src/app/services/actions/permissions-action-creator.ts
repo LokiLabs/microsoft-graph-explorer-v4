@@ -14,7 +14,8 @@ import {
 } from '../redux-constants';
 import {
   PERMS_SCOPE,
-  PERMISSION_MODE_TYPE
+  PERMISSION_MODE_TYPE,
+  ACCOUNT_TYPE
 } from '../graph-constants';
 import {
   getAuthTokenSuccess,
@@ -49,7 +50,7 @@ export function fetchScopes(): Function {
       const { devxApi, permissionsPanelOpen, permissionModeType, profileType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
       const permsScopeLookup = {
-        [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
+        [PERMISSION_MODE_TYPE.User]: (profileType === ACCOUNT_TYPE.AAD ? PERMS_SCOPE.WORK : PERMS_SCOPE.PERSONAL),
         [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
       }
       const scope = permsScopeLookup[permissionModeType];
