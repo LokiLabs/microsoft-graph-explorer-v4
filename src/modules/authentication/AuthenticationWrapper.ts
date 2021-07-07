@@ -4,7 +4,7 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { AUTH_URL, DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { AUTH_URL, DEFAULT_USER_SCOPES, GRAPH_URL, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -94,10 +94,29 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       account: this.getAccount()
     };
     try {
-      return await msalApplication.acquireTokenSilent(silentRequest);
+      this.getApplicationToken();
+      const omer = await msalApplication.acquireTokenSilent(silentRequest);
+      console.log(omer);
+      return omer;
     } catch (error) {
       throw error;
     }
+  }
+
+  public async getApplicationToken() {
+    const url = `http://localhost:4000/getApplicationToken?tenantId=${this.getAuthority()}`;
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+
+    const rawResponse = await fetch(url, {
+      headers,
+      method: 'GET',
+    })
+    const resp = await rawResponse.json();
+    console.log(resp);
+    return resp;
   }
 
   private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {

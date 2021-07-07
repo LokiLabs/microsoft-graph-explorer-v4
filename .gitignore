@@ -5,6 +5,7 @@
 /build
 /.pnp
 .pnp.js
+/src/app-token-api/node_modules/
 
 # testing
 /coverage
