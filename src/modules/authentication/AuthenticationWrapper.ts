@@ -4,7 +4,7 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { AUTH_URL, DEFAULT_USER_SCOPES, GRAPH_URL, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { AUTH_URL, DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY, PERMISSION_MODE_TYPE } from '../../app/services/graph-constants';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -87,24 +87,29 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return allAccounts[0];
   }
 
-  public async getToken() {
+  public async getToken(permissionModeType: PERMISSION_MODE_TYPE) {
     const silentRequest: SilentRequest = {
       scopes: defaultScopes,
       authority: this.getAuthority(),
       account: this.getAccount()
     };
     try {
-      this.getApplicationToken();
-      const omer = await msalApplication.acquireTokenSilent(silentRequest);
-      console.log(omer);
-      return omer;
+      const userToken = await msalApplication.acquireTokenSilent(silentRequest);
+
+      if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
+        console.log('app');
+        return await this.getApplicationToken(userToken.tenantId);
+      } else if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+        console.log('user');
+        return userToken;
+      }
     } catch (error) {
       throw error;
     }
   }
 
-  public async getApplicationToken() {
-    const url = `http://localhost:4000/getApplicationToken?tenantId=${this.getAuthority()}`;
+  public async getApplicationToken(tenantId: string) {
+    const url = `http://localhost:4000/getApplicationToken?tenantId=${tenantId}`;
     const headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -114,6 +119,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       headers,
       method: 'GET',
     })
+
     const resp = await rawResponse.json();
     console.log(resp);
     return resp;

@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 app.get('/getApplicationToken', async (req, res) => {
     try {
-        const tenantUrl = 'https://login.microsoftonline.com' + req.query.tenantId;
+        const tenantUrl = 'https://login.microsoftonline.com/' + req.query.tenantId;
         const tokenRequest = {
             scopes: ['https://graph.microsoft.com/.default'],
         };
@@ -28,13 +28,10 @@ app.get('/getApplicationToken', async (req, res) => {
                 clientSecret: process.env.REACT_APP_CLIENT_SECRET,
             }
         };
-        console.log(process.env.REACT_APP_CLIENT_ID);
-        console.log(tenantUrl);
         const msalcca = new msal.ConfidentialClientApplication(msalConfig);
         const authResponse = await msalcca.acquireTokenByClientCredential(tokenRequest);
         res.status(200).send(authResponse);
     } catch (err) {
-        console.log(err);
         res.status(400).send(err);
     }
 });
