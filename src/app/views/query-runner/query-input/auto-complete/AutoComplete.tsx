@@ -2,8 +2,6 @@ import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TooltipHost } fro
 import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
 import React, { Component } from 'react';
 import { TextField } from '@fluentui/react/lib/TextField';
-import { useBoolean } from '@fluentui/react-hooks';
-import { Stack, IStackProps, IStackStyles } from '@fluentui/react/lib/Stack';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -26,13 +24,11 @@ import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
-  private multiline: any;
 
   constructor(props: IAutoCompleteProps) {
     super(props);
 
     this.autoCompleteRef = React.createRef();
-    this.multiline = false;
 
     this.state = {
       activeSuggestion: 0,
@@ -65,11 +61,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
-
-    const newMultiline = userInput.length > 50;
-    if (newMultiline !== this.multiline) {
-      this.multiline = !this.multiline;
-    }
 
     this.setState({
       userInput,
@@ -388,13 +379,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   public render() {
 
-    const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
-    const stackTokens = { childrenGap: 50 };
-    const columnProps: Partial<IStackProps> = {
-      tokens: { childrenGap: 15 },
-      styles: { root: { width: 300 } },
-    };
-
     const {
       activeSuggestion,
       filteredSuggestions,
@@ -410,25 +394,23 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return (
       <div onBlur={this.closeSuggestionDialog}>
-        <Stack horizontal tokens={stackTokens} styles={stackStyles}>
-          <Stack {...columnProps}>
-            <TextField
-              className={autoInput}
-              type='text'
-              autoComplete='off'
-              multiline={this.multiline}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={this.onChange}
-              onBlur={this.updateUrlContent}
-              onKeyDown={this.onKeyDown}
-              value={queryUrl}
-              componentRef={this.autoCompleteRef}
-              onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
-              ariaLabel={translateMessage('Query Sample Input')}
-              role='textbox'
-            />
-          </Stack>
-        </Stack>
+        <TextField
+          className={autoInput}
+          multiline 
+          autoAdjustHeight 
+          resizable={false}
+          type='text'
+          autoComplete='off'
+          // eslint-disable-next-line react/jsx-no-bind
+          onChange={this.onChange}
+          onBlur={this.updateUrlContent}
+          onKeyDown={this.onKeyDown}
+          value={queryUrl}
+          componentRef={this.autoCompleteRef}
+          onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
+          ariaLabel={translateMessage('Query Sample Input')}
+          role='textbox'
+        />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}
