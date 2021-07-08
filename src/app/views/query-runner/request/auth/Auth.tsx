@@ -27,7 +27,7 @@ export function Auth(props: any) {
 
   useEffect(() => {
     setLoading(true);
-    authenticationWrapper.getToken().then((response: AuthenticationResult) => {
+    authenticationWrapper.getToken(permissionModeType).then((response: AuthenticationResult) => {
       setAccessToken(response.accessToken);
       setLoading(false);
     }).catch(() => {

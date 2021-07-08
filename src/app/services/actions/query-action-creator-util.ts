@@ -7,8 +7,8 @@ import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
-import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { authProvider, GraphClient, appAuthProvider } from '../graph-client';
+import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL, PERMISSION_MODE_TYPE } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -47,9 +47,10 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
 export function authenticatedRequest(
   dispatch: Function,
   query: IQuery,
-  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
+  permissionModeType: PERMISSION_MODE_TYPE,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' '),
 ) {
-  return makeRequest(query.selectedVerb, scopes)(dispatch, query);
+  return makeRequest(query.selectedVerb, scopes, permissionModeType)(dispatch, query);
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -96,7 +97,7 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
   return response;
 }
 
-const makeRequest = (httpVerb: string, scopes: string[]): Function => {
+const makeRequest = (httpVerb: string, scopes: string[], permissionModeType: PERMISSION_MODE_TYPE): Function => {
   return async (dispatch: Function, query: IQuery) => {
     const sampleHeaders: any = {};
     sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
@@ -108,13 +109,21 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
     }
 
     const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
-    const middlewareOptions = new AuthenticationHandlerOptions(
-      authProvider,
-      msalAuthOptions
-    );
-    const client = GraphClient.getInstance()
+    let middlewareOptions;
+    if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+      middlewareOptions = new AuthenticationHandlerOptions(
+        authProvider,
+        msalAuthOptions
+      );
+    } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
+      middlewareOptions = new AuthenticationHandlerOptions(
+        appAuthProvider,
+        msalAuthOptions
+      );
+    }
+    const client = GraphClient.getInstance(permissionModeType)
       .api(query.sampleUrl)
-      .middlewareOptions([middlewareOptions])
+      .middlewareOptions([middlewareOptions as AuthenticationHandlerOptions])
       .headers(sampleHeaders)
       .responseType(ResponseType.RAW);
 

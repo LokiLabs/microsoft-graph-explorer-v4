@@ -27,8 +27,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const filterPermissionsForRSC = () => {
-    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) 
-      ? permissions.filter(isRSC) 
+    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp)
+      ? permissions.filter(isRSC)
       : permissions;
   }
 

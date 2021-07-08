@@ -1,22 +1,23 @@
 import { Client } from '@microsoft/microsoft-graph-client';
 import 'isomorphic-fetch';
-import { authProvider } from './';
+import { authProvider, appAuthProvider } from './';
+import { PERMISSION_MODE_TYPE } from '../graph-constants';
 
 export class GraphClient {
   private static client: Client;
 
-  private static createClient(): Client {
+  private static createClient(permissionModeType: PERMISSION_MODE_TYPE): Client {
 
-    const clientOptions = {
+    const clientOptions = permissionModeType === PERMISSION_MODE_TYPE.User ? {
       authProvider,
-    };
+    } : { appAuthProvider };
 
     return Client.initWithMiddleware(clientOptions);
   }
 
-  public static getInstance(): Client {
+  public static getInstance(permissionModeType: PERMISSION_MODE_TYPE): Client {
     if (!GraphClient.client) {
-      GraphClient.client = this.createClient();
+      GraphClient.client = this.createClient(permissionModeType);
     }
     return GraphClient.client;
   }

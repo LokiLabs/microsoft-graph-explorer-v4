@@ -19,6 +19,7 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { PERMISSION_MODE_TYPE } from './app/services/graph-constants';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
@@ -70,7 +71,7 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
+  authenticationWrapper.getToken(PERMISSION_MODE_TYPE.User).then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));

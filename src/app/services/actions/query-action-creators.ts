@@ -15,11 +15,12 @@ import { addHistoryItem } from './request-history-action-creators';
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
+    const permissionModeType = getState().permissionModeType;
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
+      return authenticatedRequest(dispatch, query, permissionModeType).then(async (response: Response) => {
         await processResponse(response, respHeaders, dispatch, createdAt);
       }).catch(async (error: any) => {
         dispatch(queryResponse({
