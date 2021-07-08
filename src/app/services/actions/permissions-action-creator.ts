@@ -14,8 +14,7 @@ import {
 } from '../redux-constants';
 import {
   PERMS_SCOPE,
-  DISPLAY_DELEGATED_PERMISSIONS,
-  DISPLAY_APPLICATION_PERMISSIONS
+  PERMISSION_MODE_TYPE
 } from '../graph-constants';
 import {
   getAuthTokenSuccess,
@@ -49,7 +48,11 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      const scope = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS ? PERMS_SCOPE.WORK : PERMS_SCOPE.APPLICATION;
+      const permsScopeLookup = {
+        [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
+        [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
+      }
+      const scope = permsScopeLookup[permissionModeType];
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -64,6 +67,10 @@ export function fetchScopes(): Function {
 
       if (devxApi.parameters) {
         permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
+      }
+
+      if (permissionsPanelOpen) {
+        permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scope}`;
       }
 
       const headers = {

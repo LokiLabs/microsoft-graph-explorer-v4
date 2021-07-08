@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { PERMISSION_MODE_TYPE, USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -36,7 +38,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response;
-
     if (userInfo) {
       let imageUrl = '';
 
@@ -103,10 +104,18 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       graphExplorerMode,
     }: any = this.props;
 
+    const permissionModeTypeDisplayName = {
+      [PERMISSION_MODE_TYPE.User]: 'As user',
+      [PERMISSION_MODE_TYPE.TeamsApp]: 'As Teams app',
+    }
+
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
       imageInitials: this.getInitials(user.displayName),
-      text: user.displayName,
+      text: user.displayName + ' ' 
+        + translateMessage(
+          permissionModeTypeDisplayName[this.props.permissionModeType]
+        ),
       secondaryText: user.emailAddress,
     };
 
@@ -190,7 +199,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootState) {
+function mapStateToProps({ sidebarProperties, theme, graphExplorerMode, permissionModeType }: IRootState) {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
@@ -198,7 +207,8 @@ function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootS
     mobileScreen: !!sidebarProperties.mobileScreen,
     appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode
+    graphExplorerMode,
+    permissionModeType
   };
 }
 
