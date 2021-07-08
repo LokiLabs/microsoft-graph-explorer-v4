@@ -24,6 +24,7 @@ import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
+  private element: HTMLDivElement | null | undefined;
 
   constructor(props: IAutoCompleteProps) {
     super(props);
@@ -59,6 +60,25 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.props.contentChanged(userInput);
   };
 
+  public isOverflowing = (input: string) => {
+
+    function getTextWidth(text: string) {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+    
+      if (context === null) return 0;
+
+      context.font = getComputedStyle(document.body).font;
+      console.log(context.font);
+      return context.measureText(text).width + 5;
+    }
+
+    return this.element !== null
+      && this.element !== undefined
+      && getTextWidth(input) > this.element.scrollWidth;
+
+  }
+
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
@@ -66,7 +86,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.setState({
       userInput,
       queryUrl: userInput,
-      multiline: (userInput.length > 50)
+      multiline: this.isOverflowing(userInput)
     });
 
     if (showSuggestions && suggestions.length) {
@@ -254,7 +274,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (newUrl !== this.state.queryUrl) {
         this.setState({
           queryUrl: newUrl,
-          userInput: newUrl
+          userInput: newUrl,
+          multiline: this.isOverflowing(newUrl)
         });
       }
     }
@@ -397,23 +418,25 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return (
       <div onBlur={this.closeSuggestionDialog}>
-        <TextField
-          className={autoInput}
-          multiline={multiline}
-          autoAdjustHeight 
-          resizable={false}
-          type='text'
-          autoComplete='off'
-          // eslint-disable-next-line react/jsx-no-bind
-          onChange={this.onChange}
-          onBlur={this.updateUrlContent}
-          onKeyDown={this.onKeyDown}
-          value={queryUrl}
-          componentRef={this.autoCompleteRef}
-          onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
-          ariaLabel={translateMessage('Query Sample Input')}
-          role='textbox'
-        />
+        <div ref={(el) => {this.element = el}}>
+          <TextField 
+            className={autoInput}
+            multiline={multiline}
+            autoAdjustHeight 
+            resizable={false}
+            type='text'
+            autoComplete='off'
+            // eslint-disable-next-line react/jsx-no-bind
+            onChange={this.onChange}
+            onBlur={this.updateUrlContent}
+            onKeyDown={this.onKeyDown}
+            value={queryUrl}
+            componentRef={this.autoCompleteRef}
+            onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
+            ariaLabel={translateMessage('Query Sample Input')}
+            role='textbox'
+          />
+        </div>
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}
