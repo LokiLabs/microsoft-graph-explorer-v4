@@ -66,10 +66,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
     
-      if (context === null) return 0;
+      if (context === null) {
+        return 0;
+      }
 
       context.font = getComputedStyle(document.body).font;
-      console.log(context.font);
       return context.measureText(text).width + 5;
     }
 
