@@ -21,7 +21,6 @@ import { runQuery } from '../services/actions/query-action-creators';
 import { fetchScopes } from '../services/actions/permissions-action-creator';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { changeMode } from '../services/actions/permission-mode-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
@@ -62,7 +61,6 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
-    changeMode: Function;
     fetchScopes: Function;
   };
 }
@@ -425,7 +423,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       runQuery,
       setSampleQuery,
       toggleSidebar,
-      changeMode,
       fetchScopes,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {
