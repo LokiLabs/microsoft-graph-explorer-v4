@@ -37,7 +37,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       showSuggestions: false,
       userInput: this.props.sampleQuery.sampleUrl,
       queryUrl: this.props.sampleQuery.sampleUrl,
-      compare: ''
+      compare: '',
+      multiline: false
     };
   }
 
@@ -64,7 +65,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     this.setState({
       userInput,
-      queryUrl: userInput
+      queryUrl: userInput,
+      multiline: (userInput.length > 50)
     });
 
     if (showSuggestions && suggestions.length) {
@@ -384,7 +386,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions,
       showSuggestions,
       userInput,
-      queryUrl
+      queryUrl,
+      multiline
     } = this.state;
 
     const currentTheme = getTheme();
@@ -396,7 +399,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       <div onBlur={this.closeSuggestionDialog}>
         <TextField
           className={autoInput}
-          multiline 
+          multiline={multiline}
           autoAdjustHeight 
           resizable={false}
           type='text'
