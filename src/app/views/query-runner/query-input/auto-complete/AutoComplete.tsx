@@ -74,8 +74,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       return context.measureText(text).width + 5;
     }
 
-    return this.element !== null
-      && this.element !== undefined
+    return !!this.element
       && getTextWidth(input) > this.element.scrollWidth;
 
   }
@@ -436,6 +435,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
             ariaLabel={translateMessage('Query Sample Input')}
             role='textbox'
+            errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
           />
         </div>
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
