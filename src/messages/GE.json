@@ -362,6 +362,11 @@
   "Use Explorer as logged-in user": "Use Explorer as logged-in user",
   "delegated user mode": "This query requires permissions that can only be found in delegated user mode. Shown below is the response for the delegated user. Switch to delegated user mode in the top left three dots.",
   "application mode": "This query requires permissions that can only be found application mode. Switch to application mode in the top left three dots.",
+  "Resource Specific Consent popup": "To use application permissions you must use resource specific consent by downloading the ​",
+  "Sample Explorer Teams app": "Sample Explorer Teams app",
+  "Application Permissions": "Application Permissions",
+  "Learn more about": "Learn more about",
+  "resource specific consent": "resource specific consent",
   "Graph Explorer Sample App": "Graph Explorer Sample App",
   "App mode access token error": "Access token is unviewable in application mode for security reasons."
 }
