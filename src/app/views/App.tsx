@@ -23,7 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { closePopUp, openPopUp } from '../services/actions/permission-mode-action-creator';
+import { changePopUp } from '../services/actions/permission-mode-action-creator';
 import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -58,8 +58,7 @@ interface IAppProps {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
-    closePopUp: Function;
-    openPopUp: Function;
+    changePopUp: Function;
     runQuery: Function;
     toggleSidebar: Function;
     signIn: Function;
@@ -286,11 +285,11 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
   private closeDialog = (): void => {
-    this.props.actions!.closePopUp(true);
+    this.props.actions!.changePopUp(true);
   };
 
   private showDialog = (): void => {
-    this.props.actions!.openPopUp(false);
+    this.props.actions!.changePopUp(false);
   };
 
   public displayAuthenticationSection = (minimised: boolean) => {
@@ -444,8 +443,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryStatus,
-      closePopUp,
-      openPopUp,
+      changePopUp,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
