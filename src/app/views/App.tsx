@@ -47,11 +47,11 @@ interface IAppProps {
   styles?: object;
   intl: InjectedIntl;
   hideDialog: boolean;
-  sidebarProperties: ISidebarProps;
   profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
+  sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
@@ -358,7 +358,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
-          hidden={hideDialog || !!hideDialog}
+          hidden={hideDialog}
           dialogContentProps={{
             title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
