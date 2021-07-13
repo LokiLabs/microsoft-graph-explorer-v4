@@ -60,6 +60,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.props.contentChanged(userInput);
   };
 
+  // This method is bugged because it fails to grab the correct font from the div?
+  // I am not actually sure how to make a better isOverflowing method, so this is
+  // primarily a proof of concept.
   public isOverflowing = (input: string) => {
 
     function getTextWidth(text: string) {
@@ -426,7 +429,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             resizable={false}
             type='text'
             autoComplete='off'
-            // eslint-disable-next-line react/jsx-no-bind
             onChange={this.onChange}
             onBlur={this.updateUrlContent}
             onKeyDown={this.onKeyDown}
