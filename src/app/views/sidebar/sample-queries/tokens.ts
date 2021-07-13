@@ -1,5 +1,6 @@
 // @ts-ignore
 import { Guid } from 'guid-typescript';
+import { userInfo } from 'os';
 import { IToken } from '../../../../types/sidebar';
 
 /**
@@ -21,6 +22,10 @@ export function getTokens(user?: any) {
     {
       placeholder: 'group-id',
       demoTenantValue: '02bd9fd6-8f93-4758-87c3-1fb73740a315',
+    },
+    {
+      placeholder: 'my-id',
+      demoTenantValue: '48d31887-5fad-4d73-a9f5-3c356e68a038',
     },
     {
       placeholder: 'drive-item-id',
