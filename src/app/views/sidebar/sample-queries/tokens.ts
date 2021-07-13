@@ -1,6 +1,5 @@
 // @ts-ignore
 import { Guid } from 'guid-typescript';
-import { userInfo } from 'os';
 import { IToken } from '../../../../types/sidebar';
 
 /**
