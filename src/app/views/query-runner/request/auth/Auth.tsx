@@ -12,9 +12,10 @@ import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
+import { PERMISSION_MODE_TYPE } from '../../../../../app/services/graph-constants';
 
 export function Auth(props: any) {
-  const { authToken, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
+  const { authToken, dimensions: { request: { height } }, permissionModeType } = useSelector((state: IRootState) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,19 +49,33 @@ export function Auth(props: any) {
     </MessageBar>;
   }
 
+  let accessTokenComponent;
+  if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+    accessTokenComponent = <Label className={classes.accessToken}>{accessToken}</Label>;
+  } else {
+    accessTokenComponent =
+      <Label className={classes.appModeAccessTokenError}>
+        <FormattedMessage id="App mode access token error" />
+      </Label>
+  }
+
   return (<div className={classes.auth} style={{ height: requestHeight }}>
     {!loading ?
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
-          <IconButton iconProps={tokenDetailsIcon}
-            title={translateMessage('Get token details (Powered by jwt.ms)')}
-            ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
-            href={`https://jwt.ms#access_token=${accessToken}`}
-            target='_blank' />
+          {(permissionModeType === PERMISSION_MODE_TYPE.User) &&
+            <div>
+              <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+              <IconButton iconProps={tokenDetailsIcon}
+                title={translateMessage('Get token details (Powered by jwt.ms)')}
+                ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
+                href={`https://jwt.ms#access_token=${accessToken}`}
+                target='_blank' />
+            </div>
+          }
         </div>
-        <Label className={classes.accessToken} >{accessToken}</Label>
+        {accessTokenComponent}
       </div>
       :
       <Label className={classes.emptyStateLabel}>

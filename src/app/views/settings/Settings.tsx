@@ -27,13 +27,16 @@ import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
+import { changeMode } from '../../services/actions/permission-mode-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { translateMessage } from '../../utils/translate-messages';
+import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
 
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen, authToken, theme: appTheme } = useSelector((state: IRootState) => state);
+  const { permissionsPanelOpen, authToken, theme: appTheme, permissionModeType } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
@@ -47,7 +50,7 @@ function Settings(props: ISettingsProps) {
     const menuItems: any = [
       {
         key: 'office-dev-program',
-        text: messages['Office Dev Program'],
+        text: translateMessage('Office Dev Program'),
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
@@ -57,7 +60,7 @@ function Settings(props: ISettingsProps) {
       },
       {
         key: 'report-issue',
-        text: messages['Report an Issue'],
+        text: translateMessage('Report an Issue'),
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
         target: '_blank',
         iconProps: {
@@ -72,7 +75,7 @@ function Settings(props: ISettingsProps) {
       },
       {
         key: 'change-theme',
-        text: messages['Change theme'],
+        text: translateMessage('Change theme'),
         iconProps: {
           iconName: 'Color',
         },
@@ -80,19 +83,32 @@ function Settings(props: ISettingsProps) {
       }
     ];
 
+    if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+      menuItems.push({
+        key: 'view-all-permissions',
+        text: translateMessage('view all permissions'),
+        iconProps: {
+          iconName: 'AzureKeyVault',
+        },
+        onClick: () => changePanelState(),
+      });
+    }
+
     if (authenticated) {
       menuItems.push(
         {
-          key: 'view-all-permissions',
-          text: messages['view all permissions'],
+          key: 'switch-user-app-mode',
+          text: translateMessage(permissionModeType
+            ? "Use Explorer as sample Teams application"
+            : "Use Explorer as logged-in user"),
           iconProps: {
-            iconName: 'AzureKeyVault',
+            iconName: permissionModeType ? "TeamsLogo" : "Contact",
           },
-          onClick: () => changePanelState(),
+          onClick: () => handleChangeMode(permissionModeType),
         },
         {
           key: 'sign-out',
-          text: messages['sign out'],
+          text: translateMessage('sign out'),
           iconProps: {
             iconName: 'SignOut',
           },
@@ -101,7 +117,7 @@ function Settings(props: ISettingsProps) {
       );
     }
     setItems(menuItems);
-  }, [authenticated]);
+  }, [authenticated, permissionModeType]);
 
   const toggleThemeChooserDialogState = () => {
     let hidden = themeChooserDialogHidden;
@@ -112,6 +128,25 @@ function Settings(props: ISettingsProps) {
       {
         ComponentName: componentNames.THEME_CHANGE_BUTTON
       });
+  };
+
+  const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
+    let newPermissionModeType;
+    switch (permissionModeType) {
+      case PERMISSION_MODE_TYPE.User:
+        newPermissionModeType = PERMISSION_MODE_TYPE.TeamsApp;
+        dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
+        break;
+      case PERMISSION_MODE_TYPE.TeamsApp:
+        newPermissionModeType = PERMISSION_MODE_TYPE.User;
+        dispatch(changeMode(PERMISSION_MODE_TYPE.User));
+        break;
+    }
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.CHANGE_PERMISSIONS_MODE_BUTTON,
+      PermissionMode: newPermissionModeType
+    });
   };
 
   const handleSignOut = () => {
@@ -212,11 +247,11 @@ function Settings(props: ISettingsProps) {
   return (
     <div>
       <TooltipHost
-        content={messages['More actions']}
+        content={translateMessage('More actions')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
         <IconButton
-          ariaLabel={messages['More actions']}
+          ariaLabel={translateMessage('More actions')}
           role='button'
           styles={{
             label: { marginBottom: -20 },
@@ -232,7 +267,7 @@ function Settings(props: ISettingsProps) {
           onDismiss={() => toggleThemeChooserDialogState()}
           dialogContentProps={{
             type: DialogType.normal,
-            title: messages['Change theme'],
+            title: translateMessage('Change theme'),
             isMultiline: false,
           }}
         >
@@ -254,7 +289,7 @@ function Settings(props: ISettingsProps) {
               {
                 key: AppTheme.HighContrast,
                 iconProps: { iconName: 'Contrast' },
-                text: messages['High Contrast'],
+                text: translateMessage('High Contrast'),
               }
             ]}
             onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}

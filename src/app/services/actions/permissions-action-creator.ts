@@ -1,5 +1,4 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
@@ -8,7 +7,11 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
-import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
+import {
+  ACCOUNT_TYPE,
+  PERMS_SCOPE,
+  PERMISSION_MODE_TYPE
+} from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_SCOPES_PENDING,
@@ -44,9 +47,13 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, profileType, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, permissionModeType, profileType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      let scope = PERMS_SCOPE.WORK;
+      const permsScopeLookup = {
+        [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
+        [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
+      }
+      let scope = permsScopeLookup[permissionModeType];
 
       if (profileType === ACCOUNT_TYPE.AAD) {
         scope = PERMS_SCOPE.WORK;
@@ -67,8 +74,11 @@ export function fetchScopes(): Function {
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
-          }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
+      }
+
+      if (permissionsPanelOpen) {
+        permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scope}`;
       }
 
       const headers = {

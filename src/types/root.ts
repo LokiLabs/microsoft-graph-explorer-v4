@@ -1,4 +1,4 @@
-import { ACCOUNT_TYPE } from '../app/services/graph-constants';
+import { ACCOUNT_TYPE, PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
@@ -36,6 +36,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
+  permissionModeType: PERMISSION_MODE_TYPE;
   profileType: ACCOUNT_TYPE;
 }
 
