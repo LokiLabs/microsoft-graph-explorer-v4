@@ -66,6 +66,7 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'ReportWarning',
         },
+        onClick: () => trackReportAnIssueLinkClickEvent(),
       },
       {
         key: 'divider',
@@ -179,6 +180,15 @@ function Settings(props: ISettingsProps) {
         ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
       });
   }
+
+  const trackReportAnIssueLinkClickEvent = () => {
+    telemetry.trackEvent(
+      eventTypes.LINK_CLICK_EVENT,
+      {
+        ComponentName: componentNames.REPORT_AN_ISSUE_LINK
+      });
+  }
+
 
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
@@ -309,3 +319,4 @@ function Settings(props: ISettingsProps) {
 }
 
 export default injectIntl(Settings);
+
