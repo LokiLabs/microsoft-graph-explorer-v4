@@ -284,13 +284,11 @@ class App extends Component<IAppProps, IAppState> {
 
     this.props.actions!.toggleSidebar(properties);
   }
-  private closeDialog = (): void => {
-    this.props.actions!.changePopUp(true);
-  };
 
-  private showDialog = (): void => {
-    this.props.actions!.changePopUp(false);
-  };
+  private toggleDialog = (): void => {
+    const { hideDialog }: any = this.props;
+    this.props.actions!.changePopUp(!hideDialog);
+  }
 
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
@@ -346,7 +344,7 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
     if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && hideDialog) {
-      this.showDialog();
+      this.toggleDialog();
     }
     // eslint-disable-next-line react/jsx-no-target-blank
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
@@ -362,7 +360,7 @@ class App extends Component<IAppProps, IAppState> {
             title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
           }}
-          onDismiss={this.closeDialog}
+          onDismiss={this.toggleDialog}
         >
           <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
           <p>{translateMessage('Learn more about')} {rsc}.</p>
