@@ -149,9 +149,6 @@ const makeAppRequest = (httpVerb: string, devxapiUrl: string): Function => {
     const requestUrl = `${devxapiUrl}/graphproxy${graphEndpoint}`;
 
     const response = await fetch(requestUrl, options);
-    if (!response.ok) {
-      throw response;
-    }
 
     return Promise.resolve(response);
   }
