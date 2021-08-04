@@ -10,7 +10,6 @@ import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
 } from './query-action-creator-util';
-import { queryRunningStatus } from './query-loading-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
@@ -128,17 +127,18 @@ export function toggleRSCPopup(query: IQuery): Function {
     if (tokenPresent && localStorage.getItem(RSC_HIDE_POPUP) !== "true") {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
-        for (const appInfo of result.value) {
-          if (appInfo.teamsApp.externalId === TEAMS_APP_ID) {
-            dispatch(queryRunningStatus(false));
-            return dispatch(changePopUp(true));
+        for (const i of result.value) {
+          // check if Sample Teams App is installed
+          if (i.teamsApp.externalId === TEAMS_APP_ID) {
+            if (!getState().hideDialog) {
+              dispatch(changePopUp(true));
+            }
+            return
           }
         }
-        dispatch(queryRunningStatus(false));
-        return dispatch(changePopUp(false));
+        dispatch(changePopUp(false));
       }).catch(async () => {
-        dispatch(queryRunningStatus(false));
-        return dispatch(changePopUp(false));
+        dispatch(changePopUp(false));
       }
       )
     }
