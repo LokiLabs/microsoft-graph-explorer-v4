@@ -37,15 +37,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
   }
 
   function determineErrorMessage() {
-    if (graphResponse?.body?.code === "Authorization_RequestDenied") {
-      return <>.
-        <FormattedMessage id='This is a delegated API call' />
-        <span style={{ fontWeight: 600 }}>
-          <FormattedMessage id='delegated user mode' />
-        </span>
-        <FormattedMessage id='to try it out' />
-      </>;
-    } else if (graphResponse?.body?.message.includes("Missing role permissions on the request")) {
+    if (graphResponse?.body?.message.includes("Missing role permissions on the request")) {
       return <>.
         <FormattedMessage id='Please check that you have the' />
         <span style={{ fontWeight: 600 }}>
@@ -54,6 +46,13 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
         <FormattedMessage id='the correct ID(s)' />
       </>;
     }
+    return <>.
+      <FormattedMessage id='This is a delegated API call' />
+      <span style={{ fontWeight: 600 }}>
+        <FormattedMessage id='delegated user mode' />
+      </span>
+      <FormattedMessage id='to try it out' />
+    </>;
   }
 
   function setQuery(link: string) {
@@ -92,7 +91,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
           <FormattedMessage id='tab' />
         </>}
 
-        {status === 403 && permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && determineErrorMessage()}
+        {status > 399 && permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && determineErrorMessage()}
 
       </MessageBar>);
   }
