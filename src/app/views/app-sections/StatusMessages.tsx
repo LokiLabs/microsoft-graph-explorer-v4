@@ -37,7 +37,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
   }
 
   function determineErrorMessage() {
-    if (graphResponse?.body?.message.includes("Missing role permissions on the request")) {
+    if (graphResponse?.body?.message?.includes("Missing role permissions on the request")) {
       return <>.
         <FormattedMessage id='Please check that you have the' />
         <span style={{ fontWeight: 600 }}>
