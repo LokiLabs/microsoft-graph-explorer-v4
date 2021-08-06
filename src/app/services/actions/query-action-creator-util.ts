@@ -10,7 +10,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL, GRAPH_URL, PERMISSION_MODE_TYPE } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_URL, PERMISSION_MODE_TYPE } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -192,6 +192,7 @@ const makeDelegatedRequest = (httpVerb: string, scopes: string[]): Function => {
       default:
         return;
     }
+
     return Promise.resolve(response);
   };
 };
