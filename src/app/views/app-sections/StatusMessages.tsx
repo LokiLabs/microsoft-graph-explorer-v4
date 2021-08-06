@@ -91,7 +91,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
           <FormattedMessage id='tab' />
         </>}
 
-        {status > 399 && permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && determineErrorMessage()}
+        {status > 400 && permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && determineErrorMessage()}
 
       </MessageBar>);
   }
